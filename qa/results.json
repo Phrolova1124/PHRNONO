@@ -1,0 +1,349 @@
+{
+  "baseUrl": "http://localhost:4173/",
+  "browserPath": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+  "consoleErrors": [],
+  "pageErrors": [],
+  "checks": {
+    "desktopHome": {
+      "path": "/",
+      "title": "PHRNONO | 作品集",
+      "language": "zh-CN",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "projectCount": 0,
+      "galleryPanelCount": 0,
+      "detailToolCount": 0,
+      "coverageCount": 0,
+      "brokenImages": [],
+      "videoStates": [],
+      "shapeGrid": {
+        "cssWidth": 1280,
+        "cssHeight": 719,
+        "bitmapWidth": 1280,
+        "bitmapHeight": 719
+      },
+      "emailHref": "mailto:hoykarpoh740@gmail.com",
+      "cvHref": "/files/PHRNONO-CV.pdf",
+      "cvDownload": "PHRNONO-CV.pdf",
+      "sidebarItems": 4
+    },
+    "english": {
+      "language": "en",
+      "title": "PHRNONO | Portfolio",
+      "workLink": "Work"
+    },
+    "japanese": {
+      "language": "ja",
+      "title": "PHRNONO | ポートフォリオ",
+      "workLink": "作品"
+    },
+    "soundDefault": {
+      "pressed": "false",
+      "stored": "false"
+    },
+    "soundEnabled": {
+      "pressed": "true",
+      "stored": "true"
+    },
+    "soundPersisted": {
+      "pressed": "true",
+      "stored": "true"
+    },
+    "desktopWork": {
+      "path": "/work",
+      "title": "PHRNONO | 作品",
+      "language": "zh-CN",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "projectCount": 0,
+      "galleryPanelCount": 6,
+      "detailToolCount": 0,
+      "coverageCount": 0,
+      "brokenImages": [],
+      "videoStates": []
+    },
+    "scrollExpandRest": {
+      "frameClip": "inset(19% 27%)",
+      "mediaTransform": "scale(1.22)",
+      "overlayHidden": "true",
+      "overlayInert": true,
+      "titleOpacity": "1"
+    },
+    "scrollExpandOpen": {
+      "frameClip": "inset(0.000115093% 0.000163553%)",
+      "mediaTransform": "scale(1)",
+      "overlayHidden": "false",
+      "overlayInert": false,
+      "actionHref": "/work/food-stall",
+      "titleOpacity": "0"
+    },
+    "accordionGallery": {
+      "panelCount": 6,
+      "activeLabel": "Pixel Environment / 像素艺术",
+      "linkTargets": [
+        "/work/food-stall",
+        "/work/coffee-grinder",
+        "/work/pixel-environment",
+        "/character-design",
+        "https://www.artstation.com/artwork/rzE5EJ",
+        "https://www.artstation.com/artwork/P4a5lL"
+      ],
+      "browserTargets": [
+        null,
+        null,
+        null,
+        null,
+        "_blank",
+        "_blank"
+      ]
+    },
+    "characterGalleryNavigation": {
+      "href": "/character-design",
+      "target": null,
+      "path": "/character-design",
+      "sectionVisible": true
+    },
+    "characterFeature": {
+      "heading": "CHARACTER DESIGN",
+      "characterName": "LUMINA",
+      "storyParagraphs": 2,
+      "factCount": 4,
+      "artstationLinks": 0,
+      "source": "/portfolio/art-04.webm",
+      "paused": true,
+      "autoplay": false,
+      "controls": true
+    },
+    "caseStudy": {
+      "selectedTab": "02\nCoffee Grinder\n3D / TEXTURING",
+      "heading": "Coffee Grinder",
+      "panelLabel": "case-tab-1"
+    },
+    "detail-food-stall": {
+      "path": "/work/food-stall",
+      "title": "Food Stall | PHRNONO",
+      "language": "zh-CN",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "projectCount": 0,
+      "galleryPanelCount": 0,
+      "detailToolCount": 4,
+      "coverageCount": 5,
+      "brokenImages": [],
+      "videoStates": [],
+      "heading": "Food Stall",
+      "artstationHref": "https://www.artstation.com/artwork/lGgDXz",
+      "paginationLinks": [
+        "/work/pixel-environment",
+        "/work/coffee-grinder"
+      ],
+      "processNote": "ArtStation 原页未公开线框图、材质贴图或灯光分层素材。此页只展示已发布的最终作品，不补充推测性的制作过程。"
+    },
+    "detail-coffee-grinder": {
+      "path": "/work/coffee-grinder",
+      "title": "Coffee Grinder | PHRNONO",
+      "language": "zh-CN",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "projectCount": 0,
+      "galleryPanelCount": 0,
+      "detailToolCount": 4,
+      "coverageCount": 5,
+      "brokenImages": [],
+      "videoStates": [],
+      "heading": "Coffee Grinder",
+      "artstationHref": "https://www.artstation.com/artwork/BaoYg4",
+      "paginationLinks": [
+        "/work/food-stall",
+        "/work/pixel-environment"
+      ],
+      "processNote": "ArtStation 原页未公开线框图、材质贴图或灯光分层素材。此页只展示已发布的最终作品，不补充推测性的制作过程。"
+    },
+    "detail-pixel-environment": {
+      "path": "/work/pixel-environment",
+      "title": "Pixel Environment | PHRNONO",
+      "language": "zh-CN",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "projectCount": 0,
+      "galleryPanelCount": 0,
+      "detailToolCount": 4,
+      "coverageCount": 5,
+      "brokenImages": [],
+      "videoStates": [],
+      "heading": "Pixel Environment",
+      "artstationHref": "https://www.artstation.com/artwork/RqEV3W",
+      "paginationLinks": [
+        "/work/coffee-grinder",
+        "/work/food-stall"
+      ],
+      "processNote": "ArtStation 原页未公开线框图、材质贴图或灯光分层素材。此页只展示已发布的最终作品，不补充推测性的制作过程。"
+    },
+    "notFound": {
+      "path": "/missing-page",
+      "title": "404 | PHRNONO",
+      "language": "zh-CN",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "projectCount": 0,
+      "galleryPanelCount": 0,
+      "detailToolCount": 0,
+      "coverageCount": 0,
+      "brokenImages": [],
+      "videoStates": [],
+      "heading": "角色好像迷路了",
+      "homeHref": "/",
+      "workHref": "/work",
+      "mascotVisible": true
+    },
+    "routeTransitionLeaving": {
+      "visible": true,
+      "shellInert": ""
+    },
+    "routeTransitionArriving": {
+      "path": "/work",
+      "visible": true,
+      "shellInert": ""
+    },
+    "routeTransitionComplete": {
+      "path": "/work",
+      "shellInert": null
+    },
+    "siteRailTransition": {
+      "overlayVisible": true,
+      "shellInert": ""
+    },
+    "siteRailTransitionComplete": {
+      "path": "/",
+      "shellInert": null
+    },
+    "mobileHome": {
+      "path": "/",
+      "title": "PHRNONO | 作品集",
+      "language": "zh-CN",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "projectCount": 0,
+      "galleryPanelCount": 0,
+      "detailToolCount": 0,
+      "coverageCount": 0,
+      "brokenImages": [],
+      "videoStates": [],
+      "menuToggleVisible": true
+    },
+    "mobileMenu": {
+      "expanded": "true",
+      "controls": "mobile-navigation",
+      "navVisible": true,
+      "linkCount": 3,
+      "languageButtons": 3
+    },
+    "mobileLocaleFocusRestore": {
+      "menuExpanded": "false",
+      "focusReturnedToMenuButton": true
+    },
+    "mobileWork": {
+      "path": "/work",
+      "title": "PHRNONO | 作品",
+      "language": "zh-CN",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "projectCount": 0,
+      "galleryPanelCount": 6,
+      "detailToolCount": 0,
+      "coverageCount": 0,
+      "brokenImages": [],
+      "videoStates": []
+    },
+    "mobileCharacterFeature": {
+      "clientWidth": 390,
+      "scrollWidth": 390,
+      "heading": "CHARACTER DESIGN",
+      "factCount": 4
+    },
+    "mobileScrollExpand": {
+      "path": "/work",
+      "title": "PHRNONO | 作品",
+      "language": "zh-CN",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "projectCount": 0,
+      "galleryPanelCount": 6,
+      "detailToolCount": 0,
+      "coverageCount": 0,
+      "brokenImages": [],
+      "videoStates": [],
+      "state": {
+        "frameClip": "inset(0%)",
+        "overlayHidden": "false",
+        "overlayInert": false
+      }
+    },
+    "mobileDetail": {
+      "path": "/work/food-stall",
+      "title": "Food Stall | PHRNONO",
+      "language": "zh-CN",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "projectCount": 0,
+      "galleryPanelCount": 0,
+      "detailToolCount": 4,
+      "coverageCount": 5,
+      "brokenImages": [],
+      "videoStates": []
+    },
+    "mobilePixelDetail": {
+      "path": "/work/pixel-environment",
+      "title": "Pixel Environment | PHRNONO",
+      "language": "zh-CN",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "projectCount": 0,
+      "galleryPanelCount": 0,
+      "detailToolCount": 4,
+      "coverageCount": 5,
+      "brokenImages": [],
+      "videoStates": [],
+      "heading": {
+        "text": "Pixel Environment",
+        "clientWidth": 354,
+        "scrollWidth": 354,
+        "left": 18,
+        "right": 372
+      }
+    },
+    "mobile404": {
+      "path": "/not-here",
+      "title": "404 | PHRNONO",
+      "language": "zh-CN",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "projectCount": 0,
+      "galleryPanelCount": 0,
+      "detailToolCount": 0,
+      "coverageCount": 0,
+      "brokenImages": [],
+      "videoStates": []
+    },
+    "reducedMotion": {
+      "mediaQueryMatches": true,
+      "introPresent": false,
+      "documentAnimations": 0,
+      "videoCount": 0,
+      "shapeGridPresent": true
+    },
+    "reducedMotionRouteNavigation": {
+      "path": "/work",
+      "transitionPresent": 0
+    },
+    "reducedMotionScrollExpand": {
+      "trackHeight": 561.59375,
+      "stageHeight": 561.59375,
+      "frameClip": "inset(0%)",
+      "mediaTransform": "scale(1)",
+      "overlayHidden": "false",
+      "overlayInert": false,
+      "documentAnimations": 0
+    }
+  }
+}
