@@ -4,6 +4,22 @@
   "main": "worker/index.js",
   "compatibility_date": "2026-08-18",
   "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "*.phrnono.com/*",
+      "zone_name": "phrnono.com"
+    },
+    {
+      "pattern": "phrnono.com",
+      "zone_name": "phrnono.com",
+      "custom_domain": true
+    }
+  ],
+  "send_email": [
+    {
+      "name": "pl"
+    }
+  ],
   "assets": {
     "directory": "./dist/client",
     "binding": "ASSETS",
