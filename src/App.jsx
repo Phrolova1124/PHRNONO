@@ -1059,6 +1059,15 @@ export function App() {
     document.querySelector('meta[name="description"]')?.setAttribute("content", meta.description);
     document.querySelector('meta[property="og:title"]')?.setAttribute("content", meta.title);
     document.querySelector('meta[property="og:description"]')?.setAttribute("content", meta.description);
+    document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", meta.title);
+    document.querySelector('meta[name="twitter:description"]')?.setAttribute("content", meta.description);
+    const canonicalUrl = `https://phrnono.com${route.path}`;
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", canonicalUrl);
+    document.querySelector('meta[property="og:url"]')?.setAttribute("content", canonicalUrl);
+    document.querySelector('meta[name="robots"]')?.setAttribute(
+      "content",
+      route.kind === "notFound" ? "noindex, nofollow" : "index, follow",
+    );
     window.localStorage.setItem("phrolova-locale", locale);
   }, [copy, locale, route.kind, route.path]);
 

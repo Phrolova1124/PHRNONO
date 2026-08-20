@@ -8,8 +8,8 @@ export const localeOptions = [
 
 const baseTranslations = {
   zh: {
-    metaTitle: "PHRNONO | 作品集",
-    metaDescription: "PHRNONO 的 3D、像素动画与视觉设计作品集。",
+    metaTitle: "PHRNONO | Game Art & Interactive Design Portfolio",
+    metaDescription: "探索 PHRNONO 的游戏美术、3D、2D、互动设计与精选作品集。",
     intro: "作品集",
     languageLabel: "选择语言",
     switchLanguage: "切换到",
@@ -160,8 +160,8 @@ const baseTranslations = {
     ],
   },
   en: {
-    metaTitle: "PHRNONO | Portfolio",
-    metaDescription: "PHRNONO's portfolio of 3D, pixel animation, and visual design work.",
+    metaTitle: "PHRNONO | Game Art & Interactive Design Portfolio",
+    metaDescription: "Explore PHRNONO's Game Art, 3D and 2D work, interactive design, and selected portfolio projects.",
     intro: "PORTFOLIO",
     languageLabel: "Select language",
     switchLanguage: "Switch to",
@@ -312,8 +312,8 @@ const baseTranslations = {
     ],
   },
   ja: {
-    metaTitle: "PHRNONO | ポートフォリオ",
-    metaDescription: "PHRNONOの3D、ピクセルアニメーション、ビジュアルデザイン作品集。",
+    metaTitle: "PHRNONO | Game Art & Interactive Design Portfolio",
+    metaDescription: "PHRNONOのゲームアート、3D、2D、インタラクティブデザインと厳選された作品集を紹介します。",
     intro: "作品集",
     languageLabel: "言語を選択",
     switchLanguage: "表示言語を変更",

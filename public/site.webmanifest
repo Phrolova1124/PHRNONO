@@ -1,0 +1,14 @@
+{
+  "name": "PHRNONO | Game Art & Interactive Design Portfolio",
+  "short_name": "PHRNONO",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#f5f5f2",
+  "background_color": "#15151c",
+  "display": "browser"
+}
