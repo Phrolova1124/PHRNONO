@@ -245,7 +245,8 @@ function Header({ copy, locale, setLocale, workActive, gameWallActive, soundEnab
   return (
     <header className="site-header">
       <a className="brand" href="/" onClick={closeMenu} aria-label={copy.homeLabel}>
-        PHRNONO
+        <img className="brand-mark" src="/phrnono-logo.png" alt="" aria-hidden="true" />
+        <span className="brand-wordmark">PHRNONO</span>
         <span>PORTFOLIO</span>
       </a>
 

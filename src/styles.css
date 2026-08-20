@@ -193,15 +193,25 @@ img {
 
 .brand {
   display: inline-flex;
-  align-items: baseline;
-  gap: 9px;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.brand-wordmark {
   font-family: var(--display);
   font-size: 1.45rem;
   font-weight: 700;
   letter-spacing: -0.035em;
 }
 
-.brand span {
+.brand > span:not(.brand-wordmark) {
   font-family: var(--mono);
   font-size: 0.53rem;
   font-weight: 700;
@@ -2400,6 +2410,19 @@ footer span {
   .site-header {
     height: 62px;
     padding: 0 18px;
+  }
+
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand-wordmark {
+    font-size: 1.3rem;
+  }
+
+  .brand > span:not(.brand-wordmark) {
+    display: none;
   }
 
   .desktop-header-tools {
