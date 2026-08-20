@@ -136,7 +136,12 @@ function AccordionGallery({
   };
 
   const handleClick = (index, event) => {
-    if (index !== active) {
+    // Desktop hover galleries use the first click to select a panel. Touch
+    // devices have no hover state, so a first tap should open the work.
+    const supportsHover = typeof window !== "undefined"
+      && (window.matchMedia("(hover: hover) and (pointer: fine)").matches
+        || navigator.maxTouchPoints === 0);
+    if (index !== active && supportsHover) {
       event.preventDefault();
       setActive(index);
     }

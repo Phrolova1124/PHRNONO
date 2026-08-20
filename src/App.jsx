@@ -18,6 +18,9 @@ import {
 } from "@phosphor-icons/react";
 import tacticalGrid from "./assets/tactical-grid.webp";
 import AccordionGallery from "./components/AccordionGallery";
+import FlowingMenu from "./components/FlowingMenu";
+import DecryptedText from "./components/DecryptedText";
+import GamePhotoWall from "./components/GamePhotoWall";
 import LineSidebar from "./components/LineSidebar";
 import ScrollExpand from "./components/ScrollExpand";
 import ShapeGrid from "./components/ShapeGrid";
@@ -44,28 +47,29 @@ function getInitialIntroVisible() {
   return window.sessionStorage.getItem("phrolova-intro-seen") !== "true";
 }
 
-function getInitialSoundEnabled() {
-  if (typeof window === "undefined") return false;
-  return window.localStorage.getItem("phrolova-sound-enabled") === "true";
-}
-
 function getInitialRouteTransitionPhase() {
   if (typeof window === "undefined") return "idle";
   try {
-    if (window.sessionStorage.getItem(routeTransitionStorageKey) === "arriving") {
-      return "arriving";
-    }
+    const stamp = Number(window.sessionStorage.getItem(routeTransitionStorageKey));
+    if (Number.isFinite(stamp) && Date.now() - stamp < 8000) return "arriving";
   } catch {
     return "idle";
   }
   return "idle";
 }
 
+function getInitialSoundEnabled() {
+  if (typeof window === "undefined") return false;
+  return window.localStorage.getItem("phrolova-sound-enabled") === "true";
+}
+
 function getRoute() {
   const path = window.location.pathname.replace(/\/+$/, "") || "/";
   if (path === "/") return { kind: "home", path };
   if (path === "/work") return { kind: "work", path };
+  if (path === "/game-wall") return { kind: "gameWall", path };
   if (path === "/character-design") return { kind: "character", path };
+  if (path === "/work/3d-props") return { kind: "work", path };
   if (path.startsWith("/work/")) {
     const slug = path.slice("/work/".length);
     if (detailProjects[slug]) return { kind: "detail", path, slug, project: detailProjects[slug] };
@@ -206,7 +210,7 @@ function RouteTransition({ phase, onCovered, onExitComplete }) {
   );
 }
 
-function Header({ copy, locale, setLocale, workActive, soundEnabled, onSoundToggle }) {
+function Header({ copy, locale, setLocale, workActive, gameWallActive, soundEnabled, onSoundToggle }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButtonRef = useRef(null);
   const firstMobileLinkRef = useRef(null);
@@ -248,6 +252,7 @@ function Header({ copy, locale, setLocale, workActive, soundEnabled, onSoundTogg
       <div className="desktop-header-tools">
         <nav className="desktop-nav" aria-label={copy.navLabel}>
           <a href="/work" aria-current={workActive ? "page" : undefined}>{copy.navWork}</a>
+          <a href="/game-wall" aria-current={gameWallActive ? "page" : undefined}>{copy.navGameWall}</a>
           <a href="/#about">{copy.navAbout}</a>
           <a href={profileUrl} target="_blank" rel="noreferrer">
             ARTSTATION <ArrowUpRight size={15} weight="bold" />
@@ -281,6 +286,7 @@ function Header({ copy, locale, setLocale, workActive, soundEnabled, onSoundTogg
             transition={{ duration: reduceMotion ? 0.01 : 0.22 }}
           >
             <a ref={firstMobileLinkRef} href="/work" onClick={closeMenu}>{copy.navWork}</a>
+            <a href="/game-wall" onClick={closeMenu}>{copy.navGameWall}</a>
             <a href="/#about" onClick={closeMenu}>{copy.navAbout}</a>
             <a href={profileUrl} target="_blank" rel="noreferrer" onClick={closeMenu}>ArtStation</a>
             <div className="mobile-nav-tools">
@@ -294,7 +300,7 @@ function Header({ copy, locale, setLocale, workActive, soundEnabled, onSoundTogg
   );
 }
 
-function Hero({ copy }) {
+function Hero({ copy, introComplete }) {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -312,7 +318,32 @@ function Hero({ copy }) {
       <div className="hero-copy">
         <p className="hero-kicker">3D / PIXEL / VISUAL DESIGN</p>
         <h1 aria-label="PHRNONO">
-          <span>PHR</span><span className="hero-title-accent">NONO</span>
+          {introComplete ? (
+            <>
+              <DecryptedText
+                text="PHR"
+                animateOn="inViewHover"
+                speed={70}
+                maxIterations={12}
+                characters="0123456789ABCDEF"
+                parentClassName="hero-decrypted-text"
+                encryptedClassName="hero-decrypted-encrypted"
+              />
+              <DecryptedText
+                text="NONO"
+                animateOn="inViewHover"
+                speed={70}
+                maxIterations={12}
+                characters="0123456789ABCDEF"
+                parentClassName="hero-decrypted-text hero-title-accent"
+                encryptedClassName="hero-decrypted-encrypted"
+              />
+            </>
+          ) : (
+            <>
+              <span>PHR</span><span className="hero-title-accent">NONO</span>
+            </>
+          )}
         </h1>
         <p className="hero-summary">{copy.heroSummary}</p>
         <a className="primary-action" href="/work">
@@ -327,6 +358,7 @@ function Hero({ copy }) {
         transition={{ delay: reduceMotion ? 0 : 0.25, duration: reduceMotion ? 0.01 : 0.9, ease: [0.16, 1, 0.3, 1] }}
       >
         <img className="hero-grid" src={tacticalGrid} alt="" />
+        <span className="hero-scanline" aria-hidden="true" />
         <div className="hero-visual-copy" aria-hidden="true">
           <span>PORTFOLIO / 2026</span>
           <strong>3D<br />PIXEL<br />VISUAL</strong>
@@ -355,7 +387,17 @@ function Hero({ copy }) {
 }
 
 function Work({ copy }) {
-  const galleryItems = projects.map((project) => ({
+  const [activeCategory, setActiveCategory] = useState("3D SCENE");
+  const categoryOptions = ["3D SCENE", "3D PROP", "ILLUSTRATION", "CHARACTER"];
+  const reduceMotion = useReducedMotion();
+  const visibleProjects = projects.filter((project) => project.category === activeCategory);
+  const categoryItems = categoryOptions.map((category) => ({
+    link: `#category-${category.toLowerCase().replaceAll(" ", "-")}`,
+    text: copy.categoryLabels[category],
+    image: projects.find((project) => project.category === category)?.image ?? projects[0].image,
+    active: activeCategory === category,
+  }));
+  const galleryItems = visibleProjects.map((project) => ({
     image: project.image,
     label: `${project.title} / ${copy.projectDisciplines[project.id]}`,
     link: project.localUrl ?? project.artstationUrl,
@@ -370,8 +412,24 @@ function Work({ copy }) {
         <p>{copy.workDescription}</p>
       </div>
 
+      <div className="category-flowing-menu" aria-label={copy.filterLabel}>
+        <FlowingMenu
+          items={categoryItems}
+          speed={18}
+          textColor="#fbfbf8"
+          bgColor="#0c0e0c"
+          marqueeBgColor="#d6f438"
+          marqueeTextColor="#0c0e0c"
+          borderColor="rgba(251, 251, 248, 0.35)"
+          reducedMotion={reduceMotion}
+          onItemClick={(index) => setActiveCategory(categoryOptions[index])}
+          ariaLabel={copy.filterLabel}
+        />
+      </div>
+
       <div className="work-gallery-wrap">
         <AccordionGallery
+          key={activeCategory}
           items={galleryItems}
           defaultIndex={0}
           accentColor="#d6f438"
@@ -388,10 +446,6 @@ function Work({ copy }) {
         />
       </div>
 
-      <a className="profile-link" href={profileUrl} target="_blank" rel="noreferrer">
-        {copy.viewAll}
-        <ArrowUpRight size={20} weight="bold" />
-      </a>
     </section>
   );
 }
@@ -407,34 +461,56 @@ function CharacterFeature({ copy }) {
       </div>
 
       <div className="character-feature-layout">
-        <figure className="character-feature-media">
-          <video
-            src={project.video}
-            poster={project.image}
-            aria-label={copy.characterFeature.mediaAria}
-            controls
-            muted
-            loop
-            playsInline
-            preload="metadata"
-          />
-          <figcaption>{copy.characterFeature.mediaCaption}</figcaption>
+        <figure className="character-feature-design">
+          <div className="character-feature-subheading">
+            <h3>{copy.characterFeature.designTitle}</h3>
+            <p>{copy.characterFeature.designIntro}</p>
+          </div>
+          <div className="character-design-grid">
+            {[
+              ["/portfolio/art-01.webp", copy.characterFeature.designImages[0]],
+              ["/portfolio/art-02.webp", copy.characterFeature.designImages[1]],
+              ["/portfolio/art-03.webp", copy.characterFeature.designImages[2]],
+            ].map(([src, alt]) => (
+              <img key={src} src={src} alt={alt} loading="lazy" />
+            ))}
+          </div>
+          <figcaption>{copy.characterFeature.designCaption}</figcaption>
         </figure>
 
-        <article className="character-feature-story">
-          <h3>{copy.characterFeature.name}</h3>
-          <div className="character-story-copy">
-            {copy.characterFeature.story.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-          </div>
-          <dl>
-            {copy.characterFeature.facts.map(([label, value]) => (
-              <div key={label}>
-                <dt>{label}</dt>
-                <dd>{value}</dd>
-              </div>
-            ))}
-          </dl>
-        </article>
+        <div className="character-feature-animation-stack">
+          <figure className="character-feature-media">
+            <div className="character-feature-subheading">
+              <h3>{copy.characterFeature.animationTitle}</h3>
+            </div>
+            <video
+              src={project.video}
+              poster={project.image}
+              aria-label={copy.characterFeature.mediaAria}
+              controls
+              muted
+              loop
+              playsInline
+              preload="metadata"
+            />
+            <figcaption>{copy.characterFeature.mediaCaption}</figcaption>
+          </figure>
+
+          <article className="character-feature-story">
+            <h3>{copy.characterFeature.name}</h3>
+            <div className="character-story-copy">
+              {copy.characterFeature.story.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            </div>
+            <dl>
+              {copy.characterFeature.facts.map(([label, value]) => (
+                <div key={label}>
+                  <dt>{label}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </article>
+        </div>
       </div>
     </section>
   );
@@ -478,7 +554,32 @@ function Practice({ copy }) {
     <section className="practice-section" aria-labelledby="practice-title">
       <div className="practice-title-wrap">
         <h2 id="practice-title">MULTI-DISCIPLINE<br />PRACTICE</h2>
-        <img src={tacticalGrid} alt="" aria-hidden="true" loading="lazy" width="1672" height="941" />
+        <div className="practice-visual" role="img" aria-label={copy.practiceImageAlt}>
+          <img src={tacticalGrid} alt="" aria-hidden="true" loading="lazy" width="1672" height="941" />
+          <span className="practice-visual-corner" aria-hidden="true">VISUAL SYSTEM / 04</span>
+          <motion.span
+            className="practice-visual-scan"
+            aria-hidden="true"
+            initial={false}
+            animate={reduceMotion ? { opacity: 0.35 } : { x: ["-120%", "120%"] }}
+            transition={reduceMotion ? { duration: 0.01 } : { duration: 3.8, ease: "linear", repeat: Infinity, repeatDelay: 1.4 }}
+          />
+          <motion.span
+            className="practice-visual-orbit"
+            aria-hidden="true"
+            initial={false}
+            animate={reduceMotion ? { opacity: 0.55 } : { rotate: [0, 360] }}
+            transition={reduceMotion ? { duration: 0.01 } : { duration: 18, ease: "linear", repeat: Infinity }}
+          />
+          <motion.span
+            className="practice-visual-pulse"
+            aria-hidden="true"
+            initial={false}
+            animate={reduceMotion ? { opacity: 0.85, scale: 1 } : { opacity: [0.3, 1, 0.3], scale: [0.78, 1.2, 0.78] }}
+            transition={reduceMotion ? { duration: 0.01 } : { duration: 2.1, ease: "easeInOut", repeat: Infinity }}
+          />
+          <span className="practice-visual-status" aria-hidden="true">SYNC <b>READY</b></span>
+        </div>
       </div>
       <div className="discipline-list">
         {copy.practiceItems.map(([title, description], index) => (
@@ -592,8 +693,10 @@ function CaseStudy({ copy }) {
 
 function About({ copy }) {
   const skillGroups = [
-    ["SOFTWARE", ["3DS MAX", "SUBSTANCE 3D PAINTER", "UNITY", "AFTER EFFECTS"]],
-    ["FOCUS", ["3D MODELING", "TEXTURING", "PIXEL ANIMATION", "VISUAL DESIGN"]],
+    [copy.skillGroups.softwareTitle, copy.skillGroups.software],
+    [copy.skillGroups.skillsTitle, copy.skillGroups.skills],
+    [copy.skillGroups.pipelineTitle, copy.skillGroups.pipeline],
+    [copy.skillGroups.languagesTitle, copy.skillGroups.languages],
   ];
 
   return (
@@ -612,6 +715,31 @@ function About({ copy }) {
           {copy.openArtstation} <ArrowUpRight size={18} weight="bold" />
         </a>
       </div>
+
+      <section className="cv-snapshot" aria-labelledby="cv-snapshot-title">
+        <div className="cv-snapshot-head">
+          <div>
+            <span className="cv-snapshot-eyebrow">{copy.cvSnapshot.eyebrow}</span>
+            <h3 id="cv-snapshot-title">{copy.cvSnapshot.title}</h3>
+          </div>
+          <p>{copy.cvSnapshot.summary}</p>
+        </div>
+        <div className="cv-snapshot-grid">
+          <dl className="cv-snapshot-list">
+            {copy.cvSnapshot.rows.map(([label, value]) => (
+              <div key={label}>
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+          <a className="cv-snapshot-action" href="/files/PHRNONO-CV.pdf" download="PHRNONO-CV.pdf" title={copy.cvTitle}>
+            <FilePdf size={20} weight="bold" />
+            {copy.cvSnapshot.action}
+            <ArrowUpRight size={18} weight="bold" />
+          </a>
+        </div>
+      </section>
 
       <div className="skills-contact">
         <div className="skill-groups" aria-label={copy.skillsLabel}>
@@ -633,7 +761,10 @@ function About({ copy }) {
           </a>
           <a href="mailto:hoykarpoh740@gmail.com">
             <EnvelopeSimple size={20} weight="bold" />
-            {copy.email}
+            <span className="contact-email">
+              <small>{copy.email}</small>
+              <strong>hoykarpoh740@gmail.com</strong>
+            </span>
           </a>
           <a href="/files/PHRNONO-CV.pdf" download="PHRNONO-CV.pdf" title={copy.cvTitle}>
             <FilePdf size={20} weight="bold" />
@@ -671,16 +802,13 @@ function ProjectDetail({ copy, project }) {
           <p className="detail-code">{projectCopy.code}</p>
           <h1>{projectCopy.title}</h1>
           <p className="detail-summary">{projectCopy.summary}</p>
-          <div className="detail-actions">
-            <a className="primary-action" href={project.artstationUrl} target="_blank" rel="noreferrer">
-              {ui.artstationOriginal} <ArrowUpRight size={18} weight="bold" />
-            </a>
-            {project.sketchfabUrl && (
+          {project.sketchfabUrl && (
+            <div className="detail-actions">
               <a className="secondary-action" href={project.sketchfabUrl} target="_blank" rel="noreferrer">
                 {ui.interactiveModel} <ArrowUpRight size={18} weight="bold" />
               </a>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         <motion.figure
@@ -858,18 +986,21 @@ function Footer({ copy }) {
   );
 }
 
-function SiteRail({ copy, workActive, onNavigate }) {
-  const items = [copy.navHome, copy.navWork, copy.navAbout, copy.navContact];
-  const routes = ["/", "/work", "/#about", "/#contact"];
-  const initialIndex = workActive ? 1 : window.location.hash === "#contact" ? 3 : window.location.hash === "#about" ? 2 : 0;
+function SiteRail({ copy, workActive, gameWallActive, onNavigate }) {
+  const items = [copy.navHome, copy.navWork, copy.navGameWall, copy.navAbout, copy.navContact];
+  const routes = ["/", "/work", "/game-wall", "/#about", "/#contact"];
+  const initialIndex = gameWallActive ? 2 : workActive ? 1 : window.location.hash === "#contact" ? 4 : window.location.hash === "#about" ? 3 : 0;
+  const colors = gameWallActive
+    ? { accent: "#d6f438", text: "#f2f1eb", marker: "#a3a89a" }
+    : { accent: "#425000", text: "#51544d", marker: "#8d9088" };
 
   return (
     <div className="site-rail">
       <LineSidebar
         items={items}
-        accentColor="#425000"
-        textColor="#51544d"
-        markerColor="#8d9088"
+        accentColor={colors.accent}
+        textColor={colors.text}
+        markerColor={colors.marker}
         showIndex
         showMarker
         proximityRadius={100}
@@ -897,6 +1028,9 @@ function getPageMeta(copy, route) {
   if (route.kind === "work") {
     return { title: `PHRNONO | ${copy.navWork}`, description: copy.workDescription };
   }
+  if (route.kind === "gameWall") {
+    return { title: `PHRNONO | ${copy.navGameWall}`, description: copy.gameWall.intro };
+  }
   if (route.kind === "character") {
     return { title: `${copy.characterFeature.title} | PHRNONO`, description: copy.characterFeature.intro };
   }
@@ -915,6 +1049,7 @@ export function App() {
   const copy = translations[locale];
   const route = getRoute();
   const workActive = route.kind === "work" || route.kind === "detail" || route.kind === "character";
+  const gameWallActive = route.kind === "gameWall";
 
   useEffect(() => {
     const localeOption = localeOptions.find((option) => option.code === locale);
@@ -950,7 +1085,7 @@ export function App() {
     } catch {
       // The visual transition can complete without session storage.
     }
-    const timer = window.setTimeout(() => setRouteTransitionPhase("idle"), reduceMotion ? 10 : 80);
+    const timer = window.setTimeout(() => setRouteTransitionPhase("idle"), reduceMotion ? 10 : 24);
     return () => window.clearTimeout(timer);
   }, [reduceMotion, routeTransitionPhase]);
 
@@ -1018,7 +1153,7 @@ export function App() {
     const destination = pendingNavigationRef.current;
     if (!destination) return;
     try {
-      window.sessionStorage.setItem(routeTransitionStorageKey, "arriving");
+      window.sessionStorage.setItem(routeTransitionStorageKey, String(Date.now()));
     } catch {
       // Navigation still proceeds when session storage is unavailable.
     }
@@ -1030,6 +1165,9 @@ export function App() {
   if (route.kind === "work") {
     mainClassName = "work-page";
     pageContent = <><Work copy={copy} /><WorkSpotlight copy={copy} /><CaseStudy copy={copy} /></>;
+  } else if (route.kind === "gameWall") {
+    mainClassName = "game-wall-page-shell";
+    pageContent = <GamePhotoWall copy={copy} />;
   } else if (route.kind === "character") {
     mainClassName = "character-page";
     pageContent = <CharacterFeature copy={copy} />;
@@ -1041,7 +1179,7 @@ export function App() {
     pageContent = <NotFoundPage copy={copy} />;
   } else {
     mainClassName = "home-page";
-    pageContent = <><Hero copy={copy} /><Practice copy={copy} /><About copy={copy} /></>;
+    pageContent = <><Hero copy={copy} introComplete={!introVisible} /><Practice copy={copy} /><About copy={copy} /></>;
   }
 
   return (
@@ -1052,17 +1190,18 @@ export function App() {
         onCovered={completeRouteTransition}
         onExitComplete={() => setRouteTransitionBlocking(false)}
       />
-      <div className="site-shell" inert={introVisible || routeTransitionBlocking ? true : undefined}>
+      <div className={`site-shell${gameWallActive ? " site-shell-game-wall" : ""}`} inert={introVisible || routeTransitionBlocking ? true : undefined}>
         <a className="skip-link" href="#main-content">{copy.skipToContent}</a>
         <Header
           copy={copy}
           locale={locale}
           setLocale={setLocale}
           workActive={workActive}
+          gameWallActive={gameWallActive}
           soundEnabled={soundEnabled}
           onSoundToggle={toggleSound}
         />
-        <SiteRail copy={copy} workActive={workActive} onNavigate={requestNavigation} />
+        <SiteRail copy={copy} workActive={workActive} gameWallActive={gameWallActive} onNavigate={requestNavigation} />
         <main id="main-content" className={mainClassName} tabIndex="-1">{pageContent}</main>
         <Footer copy={copy} />
       </div>

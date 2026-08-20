@@ -1,10 +1,18 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
+  "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "phrnono",
   "main": "worker/index.js",
-  "compatibility_date": "2026-08-17",
+  "compatibility_date": "2026-08-18",
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "phrnono.com",
+      "custom_domain": true
+    }
+  ],
   "assets": {
     "directory": "./dist/client",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
   }
 }

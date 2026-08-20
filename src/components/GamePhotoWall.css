@@ -1,0 +1,631 @@
+.site-shell-game-wall {
+  background: #0b0d10;
+  color: #f2f1eb;
+}
+
+.site-shell-game-wall .site-header {
+  border-color: rgba(242, 241, 235, 0.2);
+  background: rgba(11, 13, 16, 0.9);
+  color: #f2f1eb;
+}
+
+.site-shell-game-wall .brand,
+.site-shell-game-wall .desktop-nav a,
+.site-shell-game-wall .menu-toggle,
+.site-shell-game-wall .sound-toggle,
+.site-shell-game-wall .language-switcher button {
+  color: #f2f1eb;
+}
+
+.site-shell-game-wall .desktop-nav a:hover {
+  color: var(--acid);
+}
+
+.site-shell-game-wall .language-switcher,
+.site-shell-game-wall .language-switcher button,
+.site-shell-game-wall .sound-toggle {
+  border-color: rgba(242, 241, 235, 0.68);
+}
+
+.site-shell-game-wall .language-switcher button.active,
+.site-shell-game-wall .language-switcher button:hover,
+.site-shell-game-wall .sound-toggle:hover,
+.site-shell-game-wall .sound-toggle[aria-pressed="true"] {
+  color: #10120c;
+}
+
+.site-shell-game-wall footer {
+  border-color: rgba(242, 241, 235, 0.24);
+  background: #10140f;
+  color: #f2f1eb;
+}
+
+.game-wall-page {
+  min-height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 80% 3%, rgba(214, 244, 56, 0.17), transparent 22rem),
+    radial-gradient(circle at 12% 34%, rgba(107, 74, 255, 0.18), transparent 32rem),
+    #0b0d10;
+}
+
+.game-wall-hero {
+  position: relative;
+  display: grid;
+  min-height: min(710px, 88dvh);
+  grid-template-columns: minmax(0, 0.95fr) minmax(290px, 0.62fr);
+  align-items: end;
+  gap: clamp(36px, 8vw, 130px);
+  padding: clamp(126px, 13vw, 192px) clamp(5vw, 8.5vw, 160px) clamp(58px, 8vw, 112px);
+  border-bottom: 1px solid rgba(242, 241, 235, 0.18);
+  isolation: isolate;
+}
+
+.game-wall-hero::before,
+.game-wall-hero::after {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  pointer-events: none;
+}
+
+.game-wall-hero::before {
+  inset: 0;
+  background-image: linear-gradient(rgba(242, 241, 235, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(242, 241, 235, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to right, black 0%, rgba(0, 0, 0, 0.18) 58%, transparent 96%);
+}
+
+.game-wall-hero::after {
+  top: 68px;
+  right: 16%;
+  bottom: 0;
+  width: 1px;
+  background: rgba(242, 241, 235, 0.17);
+}
+
+.game-wall-copy {
+  max-width: 760px;
+}
+
+.game-wall-eyebrow,
+.game-wall-toolbar > div > p,
+.game-wall-count,
+.game-wall-hero-frame span,
+.game-wall-tile-meta,
+.game-wall-lightbox-bar {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.game-wall-eyebrow {
+  color: var(--acid);
+}
+
+.game-wall-decrypted-text {
+  display: inline-block;
+}
+
+.game-wall-decrypted-encrypted {
+  opacity: 0.56;
+}
+
+.game-wall-copy h1 {
+  max-width: 710px;
+  margin: 17px 0 23px;
+  font-family: var(--display);
+  font-size: clamp(4.7rem, 9.6vw, 10.3rem);
+  line-height: 0.76;
+  letter-spacing: -0.07em;
+  text-transform: uppercase;
+}
+
+.game-wall-copy h1 span {
+  display: block;
+  margin-left: clamp(1rem, 7vw, 7rem);
+  color: var(--acid);
+}
+
+.game-wall-intro {
+  max-width: 510px;
+  margin: 0;
+  color: rgba(242, 241, 235, 0.86);
+  font-size: clamp(0.98rem, 1.25vw, 1.2rem);
+  line-height: 1.72;
+}
+
+.game-wall-instruction {
+  max-width: 540px;
+  margin: 21px 0 0;
+  color: rgba(242, 241, 235, 0.54);
+  font-family: var(--mono);
+  font-size: 0.67rem;
+  line-height: 1.6;
+  letter-spacing: 0.045em;
+}
+
+.game-wall-hero-frame {
+  position: relative;
+  justify-self: end;
+  width: min(100%, 465px);
+  aspect-ratio: 1.06;
+  overflow: hidden;
+  border: 1px solid rgba(242, 241, 235, 0.5);
+  box-shadow: 19px 19px 0 rgba(214, 244, 56, 0.92);
+  transform: translateY(18px);
+}
+
+.game-wall-hero-frame::before {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
+  background: linear-gradient(140deg, rgba(11, 13, 16, 0.08), rgba(11, 13, 16, 0.78));
+}
+
+.game-wall-hero-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 54% 48%;
+  filter: saturate(0.92) contrast(1.06);
+}
+
+.game-wall-hero-frame span,
+.game-wall-hero-frame strong {
+  position: absolute;
+  z-index: 2;
+  left: 19px;
+}
+
+.game-wall-hero-frame span {
+  bottom: 18px;
+  color: #fff;
+}
+
+.game-wall-hero-frame strong {
+  bottom: 26px;
+  color: var(--acid);
+  font-family: var(--display);
+  font-size: clamp(5rem, 9vw, 8.4rem);
+  line-height: 0.7;
+  letter-spacing: -0.08em;
+}
+
+.game-wall-browser {
+  padding: clamp(42px, 7vw, 104px) clamp(4vw, 7vw, 130px) clamp(70px, 10vw, 156px);
+}
+
+.game-wall-toolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: clamp(28px, 4vw, 54px);
+  padding-bottom: 19px;
+  border-bottom: 1px solid rgba(242, 241, 235, 0.25);
+}
+
+.game-wall-toolbar > div > p {
+  color: var(--acid);
+}
+
+.game-wall-toolbar h2 {
+  margin: 6px 0 0;
+  font-family: var(--display);
+  font-size: clamp(2.35rem, 4.2vw, 4.8rem);
+  line-height: 0.88;
+  letter-spacing: -0.055em;
+}
+
+.game-wall-toolbar-right {
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  gap: 20px;
+}
+
+.game-wall-count {
+  color: rgba(242, 241, 235, 0.6);
+  white-space: nowrap;
+}
+
+.game-wall-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: 7px;
+}
+
+.game-wall-filters button {
+  min-height: 31px;
+  padding: 7px 11px;
+  border: 1px solid rgba(242, 241, 235, 0.34);
+  background: transparent;
+  color: rgba(242, 241, 235, 0.72);
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  transition: color 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.game-wall-filters button:hover,
+.game-wall-filters button[aria-pressed="true"] {
+  border-color: var(--acid);
+  background: var(--acid);
+  color: #0b0d10;
+}
+
+.game-wall-grid {
+  display: grid;
+  grid-auto-flow: dense;
+  grid-auto-rows: clamp(38px, 4.4vw, 67px);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.game-wall-tile {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(242, 241, 235, 0.22);
+  background: #171a1f;
+  color: #f2f1eb;
+  cursor: zoom-in;
+  isolation: isolate;
+}
+
+.game-wall-tile-feature {
+  grid-column: span 6;
+  grid-row: span 5;
+}
+
+.game-wall-tile-wide {
+  grid-column: span 5;
+  grid-row: span 4;
+}
+
+.game-wall-tile-standard {
+  grid-column: span 3;
+  grid-row: span 3;
+}
+
+.game-wall-tile-tall {
+  grid-column: span 3;
+  grid-row: span 4;
+}
+
+.game-wall-tile img,
+.game-wall-tile-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.game-wall-tile img {
+  object-fit: cover;
+  transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 260ms ease;
+}
+
+.game-wall-tile-scrim {
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(8, 9, 11, 0.04) 30%, rgba(8, 9, 11, 0.79) 100%);
+  opacity: 0.76;
+  transition: opacity 200ms ease;
+}
+
+.game-wall-tile-meta,
+.game-wall-tile-label {
+  position: absolute;
+  z-index: 2;
+}
+
+.game-wall-tile-meta {
+  right: 10px;
+  bottom: 9px;
+  display: flex;
+  align-items: end;
+  gap: 7px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.game-wall-tile-meta strong {
+  color: var(--acid);
+  font-size: 1rem;
+  line-height: 0.8;
+}
+
+.game-wall-tile-label {
+  bottom: 11px;
+  left: 10px;
+  max-width: calc(100% - 88px);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.game-wall-tile:hover,
+.game-wall-tile:focus-visible {
+  border-color: var(--acid);
+  outline: none;
+}
+
+.game-wall-tile:hover img,
+.game-wall-tile:focus-visible img {
+  transform: scale(1.055);
+  filter: saturate(1.08) contrast(1.03);
+}
+
+.game-wall-tile:hover .game-wall-tile-scrim,
+.game-wall-tile:focus-visible .game-wall-tile-scrim {
+  opacity: 0.48;
+}
+
+.game-wall-tile:hover .game-wall-tile-label,
+.game-wall-tile:focus-visible .game-wall-tile-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.game-wall-disclaimer {
+  max-width: 720px;
+  margin: 27px 0 0;
+  color: rgba(242, 241, 235, 0.52);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  line-height: 1.65;
+}
+
+.game-wall-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  background: rgba(4, 5, 7, 0.98);
+  color: #f2f1eb;
+}
+
+.game-wall-lightbox-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 42px;
+  align-items: center;
+  gap: 16px;
+  min-height: 67px;
+  padding: 0 clamp(16px, 3.2vw, 56px);
+  border-bottom: 1px solid rgba(242, 241, 235, 0.2);
+}
+
+.game-wall-lightbox-bar p {
+  margin: 0;
+}
+
+.game-wall-lightbox-bar p:nth-of-type(2) {
+  color: rgba(242, 241, 235, 0.55);
+}
+
+.game-wall-lightbox-bar button,
+.game-wall-lightbox-arrow {
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(242, 241, 235, 0.37);
+  background: rgba(11, 13, 16, 0.75);
+  color: #f2f1eb;
+  cursor: pointer;
+}
+
+.game-wall-lightbox-bar button {
+  width: 38px;
+  height: 38px;
+}
+
+.game-wall-lightbox-bar button:hover,
+.game-wall-lightbox-bar button:focus-visible,
+.game-wall-lightbox-arrow:hover,
+.game-wall-lightbox-arrow:focus-visible {
+  border-color: var(--acid);
+  background: var(--acid);
+  color: #0b0d10;
+  outline: none;
+}
+
+.game-wall-lightbox-stage {
+  position: relative;
+  display: grid;
+  min-height: 0;
+  place-items: center;
+  padding: clamp(18px, 4.2vw, 64px) clamp(74px, 10vw, 170px);
+}
+
+.game-wall-lightbox-image {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 100%;
+  border: 1px solid rgba(242, 241, 235, 0.25);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+  object-fit: contain;
+}
+
+.game-wall-lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  transform: translateY(-50%);
+}
+
+.game-wall-lightbox-previous {
+  left: clamp(13px, 2vw, 36px);
+}
+
+.game-wall-lightbox-next {
+  right: clamp(13px, 2vw, 36px);
+}
+
+@media (max-width: 1050px) {
+  .game-wall-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 0.52fr);
+    padding-inline: 6vw;
+  }
+
+  .game-wall-browser {
+    padding-inline: 5vw;
+  }
+
+  .game-wall-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+
+  .game-wall-tile-feature {
+    grid-column: span 5;
+    grid-row: span 4;
+  }
+
+  .game-wall-tile-wide {
+    grid-column: span 4;
+    grid-row: span 3;
+  }
+
+  .game-wall-tile-standard {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .game-wall-tile-tall {
+    grid-column: span 2;
+    grid-row: span 3;
+  }
+}
+
+@media (max-width: 720px) {
+  .site-shell-game-wall .mobile-nav {
+    background: #0b0d10;
+    color: #f2f1eb;
+  }
+
+  .game-wall-hero {
+    display: block;
+    min-height: 0;
+    padding: 116px 6vw 68px;
+  }
+
+  .game-wall-hero::after {
+    right: 8vw;
+  }
+
+  .game-wall-copy h1 {
+    font-size: clamp(4.3rem, 21vw, 7rem);
+  }
+
+  .game-wall-copy h1 span {
+    margin-left: 10vw;
+  }
+
+  .game-wall-hero-frame {
+    width: min(88%, 345px);
+    margin: 45px 0 0 auto;
+    box-shadow: 13px 13px 0 rgba(214, 244, 56, 0.92);
+  }
+
+  .game-wall-browser {
+    padding: 42px 4vw 74px;
+  }
+
+  .game-wall-toolbar,
+  .game-wall-toolbar-right {
+    display: block;
+  }
+
+  .game-wall-toolbar {
+    margin-bottom: 29px;
+  }
+
+  .game-wall-count {
+    margin: 18px 0 12px;
+  }
+
+  .game-wall-filters {
+    justify-content: start;
+  }
+
+  .game-wall-grid {
+    grid-auto-rows: 26vw;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  .game-wall-tile-feature,
+  .game-wall-tile-wide {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .game-wall-tile-standard {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+
+  .game-wall-tile-tall {
+    grid-column: span 1;
+    grid-row: span 2;
+  }
+
+  .game-wall-tile-label {
+    display: none;
+  }
+
+  .game-wall-lightbox-bar {
+    grid-template-columns: minmax(0, 1fr) 42px;
+    gap: 10px;
+    min-height: 60px;
+    padding-inline: 13px;
+  }
+
+  .game-wall-lightbox-bar p:nth-of-type(2) {
+    display: none;
+  }
+
+  .game-wall-lightbox-stage {
+    padding: 18px 12px 74px;
+  }
+
+  .game-wall-lightbox-arrow {
+    top: auto;
+    bottom: 16px;
+    width: 48px;
+    height: 42px;
+    transform: none;
+  }
+
+  .game-wall-lightbox-previous {
+    left: calc(50% - 53px);
+  }
+
+  .game-wall-lightbox-next {
+    right: calc(50% - 53px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-wall-tile img,
+  .game-wall-tile-scrim,
+  .game-wall-tile-label,
+  .game-wall-filters button {
+    transition: none;
+  }
+}
