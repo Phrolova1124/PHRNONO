@@ -1,6 +1,22 @@
 const source = (folder, file) => `/game-wall/${folder}/${file}.jpg`;
+const collectionSource = (folder, file) => `${source(folder, file)}?v=collection-20260820`;
+
+const collectionShapes = ["feature", "wide", "standard", "wide", "feature", "standard", "wide"];
+const collectionImages = Array.from({ length: 112 }, (_, index) => {
+  const number = index + 1;
+  const id = `collection-${String(number).padStart(3, "0")}`;
+  return {
+    id,
+    group: "collection",
+    number,
+    shape: collectionShapes[index % collectionShapes.length],
+    full: collectionSource("full", id),
+    thumb: collectionSource("thumb", id),
+  };
+});
 
 export const gameWallImages = [
+  ...collectionImages,
   { id: "sunlit-11", group: "sunlit", number: 11, shape: "feature", full: source("full", "sunlit-cdn-01"), thumb: source("thumb", "sunlit-cdn-01") },
   { id: "sunlit-12", group: "sunlit", number: 12, shape: "wide", full: source("full", "sunlit-cdn-02"), thumb: source("thumb", "sunlit-cdn-02") },
   { id: "sunlit-13", group: "sunlit", number: 13, shape: "tall", full: source("full", "sunlit-cdn-03"), thumb: source("thumb", "sunlit-cdn-03") },

@@ -5,7 +5,7 @@ import { gameWallImages } from "../gameWallData";
 import DecryptedText from "./DecryptedText";
 import "./GamePhotoWall.css";
 
-const filters = ["all", "shoreline", "scarlet", "garden", "starlight", "sunlit"];
+const filters = ["all", "collection", "shoreline", "scarlet", "garden", "starlight", "sunlit"];
 
 function fill(template, values) {
   return Object.entries(values).reduce(
@@ -188,7 +188,7 @@ export default function GamePhotoWall({ copy }) {
                   <img
                     src={image.thumb}
                     alt={fill(copy.gameWall.imageAlt, { group: copy.gameWall.groups[image.group], index: imageNumber(image) })}
-                    loading="eager"
+                    loading={index < 12 ? "eager" : "lazy"}
                     decoding="async"
                   />
                   <span className="game-wall-tile-scrim" aria-hidden="true" />
