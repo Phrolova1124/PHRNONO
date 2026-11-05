@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
+import SkeletonImage from "./SkeletonImage";
+import PreviewWatermark from "./PreviewWatermark";
 import "./AccordionGallery.css";
 
 function AccordionGallery({
@@ -23,6 +25,7 @@ function AccordionGallery({
   grayscale = true,
   ariaLabel = "Portfolio gallery",
   className = "",
+  onItemClick,
 }) {
   const rootRef = useRef(null);
   const panelRefs = useRef([]);
@@ -144,7 +147,9 @@ function AccordionGallery({
     if (index !== active && supportsHover) {
       event.preventDefault();
       setActive(index);
+      return;
     }
+    onItemClick?.(items[index], event);
   };
 
   const handleKeyDown = (index, event) => {
@@ -193,9 +198,15 @@ function AccordionGallery({
           >
             <span className="ag-panel__frame">
               <span className="ag-panel__media" ref={(element) => { mediaRefs.current[index] = element; }}>
-                <img src={item.image} alt={item.alt || item.label || ""} draggable="false" loading="lazy" />
+                <SkeletonImage
+                  src={item.image}
+                  alt={item.alt || item.label || ""}
+                  draggable="false"
+                  loading="lazy"
+                />
               </span>
               <span className="ag-panel__overlay" aria-hidden="true" />
+              {item.previewOnly && <PreviewWatermark label={item.watermarkText} />}
             </span>
             {showLabels && (
               <span className="ag-panel__label" aria-hidden="true">

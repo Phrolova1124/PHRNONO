@@ -1,11 +1,21 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { CaretLeft, CaretRight, X } from "@phosphor-icons/react";
+import { normalizeGameWallContent, usePublishedContent } from "../contentApi";
 import { gameWallImages } from "../gameWallData";
-import DecryptedText from "./DecryptedText";
+import LocalizedDecryptedText from "./LocalizedDecryptedText";
+import PixelSwap from "./PixelSwap";
+import ShapeGrid from "./ShapeGrid";
+import SkeletonImage from "./SkeletonImage";
+import PreviewWatermark from "./PreviewWatermark";
 import "./GamePhotoWall.css";
 
 const filters = ["all", "collection", "shoreline", "scarlet", "garden", "starlight", "sunlit"];
+
+const tiltStyleProperties = [
+  "--game-wall-tilt-x",
+  "--game-wall-tilt-y",
+];
 
 function fill(template, values) {
   return Object.entries(values).reduce(
@@ -18,23 +28,143 @@ function imageNumber(image) {
   return String(image.number).padStart(2, "0");
 }
 
+function useFinePointer() {
+  const [finePointer, setFinePointer] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const updateFinePointer = () => setFinePointer(mediaQuery.matches);
+
+    updateFinePointer();
+    mediaQuery.addEventListener("change", updateFinePointer);
+
+    return () => mediaQuery.removeEventListener("change", updateFinePointer);
+  }, []);
+
+  return finePointer;
+}
+
+function GameWallTile({ image, index, label, copy, reduceMotion, tiltEnabled, onOpen }) {
+  const surfaceRef = useRef(null);
+  const animationFrameRef = useRef(0);
+  const nextTiltRef = useRef(null);
+
+  const resetTilt = useCallback(() => {
+    if (animationFrameRef.current) {
+      window.cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = 0;
+    }
+
+    nextTiltRef.current = null;
+    const surface = surfaceRef.current;
+    if (!surface) return;
+
+    surface.dataset.tiltActive = "false";
+    tiltStyleProperties.forEach((property) => surface.style.removeProperty(property));
+  }, []);
+
+  const applyTilt = useCallback(() => {
+    animationFrameRef.current = 0;
+    const surface = surfaceRef.current;
+    const nextTilt = nextTiltRef.current;
+    if (!surface || !nextTilt) return;
+
+    surface.style.setProperty("--game-wall-tilt-x", `${nextTilt.rotateX.toFixed(2)}deg`);
+    surface.style.setProperty("--game-wall-tilt-y", `${nextTilt.rotateY.toFixed(2)}deg`);
+    surface.dataset.tiltActive = "true";
+  }, []);
+
+  const handlePointerMove = useCallback((event) => {
+    if (!tiltEnabled || event.pointerType !== "mouse") return;
+
+    const bounds = event.currentTarget.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) return;
+
+    const pointerX = Math.min(1, Math.max(0, (event.clientX - bounds.left) / bounds.width));
+    const pointerY = Math.min(1, Math.max(0, (event.clientY - bounds.top) / bounds.height));
+
+    nextTiltRef.current = {
+      rotateX: (0.5 - pointerY) * 4.8,
+      rotateY: (pointerX - 0.5) * 6.2,
+    };
+
+    if (!animationFrameRef.current) {
+      animationFrameRef.current = window.requestAnimationFrame(applyTilt);
+    }
+  }, [applyTilt, tiltEnabled]);
+
+  useEffect(() => () => resetTilt(), [resetTilt]);
+
+  useEffect(() => {
+    if (!tiltEnabled) resetTilt();
+  }, [resetTilt, tiltEnabled]);
+
+  return (
+    <motion.button
+      className={`game-wall-tile game-wall-tile-${image.shape}`}
+      type="button"
+      onClick={(event) => onOpen(image, event)}
+      onPointerMove={tiltEnabled ? handlePointerMove : undefined}
+      onPointerLeave={resetTilt}
+      onPointerCancel={resetTilt}
+      onBlur={resetTilt}
+      data-tilt-enabled={tiltEnabled ? "true" : "false"}
+      aria-label={fill(copy.gameWall.openImage, { label: copy.gameWall.groups[image.group], index: imageNumber(image) })}
+      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={reduceMotion ? { opacity: 1 } : { opacity: 0, scale: 0.96 }}
+      transition={{ duration: reduceMotion ? 0.01 : 0.32, delay: reduceMotion ? 0 : Math.min(index * 0.018, 0.24) }}
+      layout={!reduceMotion}
+    >
+      <span ref={surfaceRef} className="game-wall-tile__tilt-surface" data-tilt-active="false">
+        <SkeletonImage
+          src={image.thumb}
+          alt={fill(copy.gameWall.imageAlt, { group: copy.gameWall.groups[image.group], index: imageNumber(image) })}
+          loading={index < 12 ? "eager" : "lazy"}
+          decoding="async"
+        />
+        <span className="game-wall-tile-scrim" aria-hidden="true" />
+        {image.previewOnly && <PreviewWatermark label={image.watermarkText} />}
+        <span className="game-wall-tile-meta">
+          <span>{copy.gameWall.groups[image.group]}</span>
+          <strong>{imageNumber(image)}</strong>
+        </span>
+        <span className="game-wall-tile-label">{label}</span>
+      </span>
+    </motion.button>
+  );
+}
+
+function GameWallTitle({ copy }) {
+  return (
+    <h1 id="game-wall-title">
+      <span className="game-wall-title-decrypted">{copy.gameWall.title}</span>
+      <span className="game-wall-title-decrypted game-wall-title-accent">{copy.gameWall.titleAccent}</span>
+    </h1>
+  );
+}
+
 export default function GamePhotoWall({ copy }) {
+  const images = usePublishedContent("game-wall", gameWallImages, normalizeGameWallContent);
   const [filter, setFilter] = useState("all");
   const [selectedId, setSelectedId] = useState(null);
+  const [lightboxMedia, setLightboxMedia] = useState({ id: null, state: "loading" });
   const openerRef = useRef(null);
   const closeButtonRef = useRef(null);
   const lightboxRef = useRef(null);
   const restoreFocusRef = useRef(false);
   const reduceMotion = useReducedMotion();
+  const finePointer = useFinePointer();
+  const tiltEnabled = finePointer && !reduceMotion;
 
   const visibleImages = useMemo(
-    () => (filter === "all" ? gameWallImages : gameWallImages.filter((image) => image.group === filter)),
-    [filter],
+    () => (filter === "all" ? images : images.filter((image) => image.group === filter)),
+    [filter, images],
   );
   const selectedIndex = visibleImages.findIndex((image) => image.id === selectedId);
   const selected = selectedIndex >= 0 ? visibleImages[selectedIndex] : null;
 
-  const getLabel = (image) => fill(copy.gameWall.fullLabel, {
+  const getLabel = (image) => image.title || fill(copy.gameWall.fullLabel, {
     group: copy.gameWall.groups[image.group],
     index: imageNumber(image),
   });
@@ -116,38 +246,53 @@ export default function GamePhotoWall({ copy }) {
   return (
     <section className="game-wall-page" aria-labelledby="game-wall-title">
       <div className="game-wall-hero">
+        <ShapeGrid
+          className="game-wall-hero__shape-grid"
+          speed={reduceMotion ? 0 : 0.28}
+          squareSize={48}
+          direction="diagonal"
+          borderColor="rgba(242, 241, 235, 0.08)"
+          hoverFillColor="transparent"
+          shape="square"
+          hoverTrailAmount={0}
+        />
         <div className="game-wall-copy">
           <p className="game-wall-eyebrow">
-            <DecryptedText
-              text={fill(copy.gameWall.eyebrow, { count: gameWallImages.length })}
-              animateOn="view"
-              sequential
-              revealDirection="center"
-              speed={24}
-              characters="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 /.-"
-              parentClassName="game-wall-decrypted-text"
-              encryptedClassName="game-wall-decrypted-encrypted"
-            />
+            {fill(copy.gameWall.eyebrow, { count: images.length })}
           </p>
-          <h1 id="game-wall-title">
-            {copy.gameWall.title}
-            <span>{copy.gameWall.titleAccent}</span>
-          </h1>
-          <p className="game-wall-intro">{copy.gameWall.intro}</p>
-          <p className="game-wall-instruction">{copy.gameWall.instruction}</p>
+          <GameWallTitle copy={copy} />
+          <p className="game-wall-intro"><LocalizedDecryptedText text={copy.gameWall.intro} /></p>
+          <p className="game-wall-instruction"><LocalizedDecryptedText text={copy.gameWall.instruction} /></p>
         </div>
-        <div className="game-wall-hero-frame" aria-hidden="true">
-          <img src="/game-wall/thumb/crimson-20.jpg" alt="" />
-          <span>PHRNONO / PLAY LOG</span>
-          <strong>{String(gameWallImages.length).padStart(2, "0")}</strong>
+        <div className="game-wall-hero-frame">
+          <PixelSwap
+            className="game-wall-hero-pixel-swap"
+            firstContent={<SkeletonImage src="/game-wall/thumb/crimson-20.jpg" alt={copy.gameWall.heroPreviewFirstAlt} shimmer />}
+            secondContent={<SkeletonImage src="/game-wall/thumb/collection-113.jpg" alt={copy.gameWall.heroPreviewSecondAlt} shimmer />}
+            pixelSize={52}
+            gap={1}
+            pixelRadius={0}
+            pixelSpin={0}
+            pixelScale={0.35}
+            duration={900}
+            pixelDuration={340}
+            pattern="diagonal"
+            randomness={0.14}
+            fade
+            trigger="click"
+            ariaLabel={copy.gameWall.heroPreviewAction}
+            aspectRatio="1.06"
+          />
+          <span className="game-wall-hero-prompt"><LocalizedDecryptedText text={copy.gameWall.heroPreviewPrompt} /></span>
+          <strong>{String(images.length).padStart(2, "0")}</strong>
         </div>
       </div>
 
-      <div className="game-wall-browser">
+      <div className="game-wall-browser" data-cia-context="game-wall">
         <div className="game-wall-toolbar">
           <div>
-            <p>{copy.gameWall.archiveLabel}</p>
-            <h2>{copy.gameWall.archiveTitle}</h2>
+            <p><LocalizedDecryptedText text={copy.gameWall.archiveLabel} /></p>
+            <h2><LocalizedDecryptedText text={copy.gameWall.archiveTitle} variant="display" /></h2>
           </div>
           <div className="game-wall-toolbar-right">
             <p className="game-wall-count" aria-live="polite">
@@ -173,37 +318,22 @@ export default function GamePhotoWall({ copy }) {
             {visibleImages.map((image, index) => {
               const label = getLabel(image);
               return (
-                <motion.button
+                <GameWallTile
                   key={image.id}
-                  className={`game-wall-tile game-wall-tile-${image.shape}`}
-                  type="button"
-                  onClick={(event) => openViewer(image, event)}
-                  aria-label={fill(copy.gameWall.openImage, { label: copy.gameWall.groups[image.group], index: imageNumber(image) })}
-                  initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={reduceMotion ? { opacity: 1 } : { opacity: 0, scale: 0.96 }}
-                  transition={{ duration: reduceMotion ? 0.01 : 0.32, delay: reduceMotion ? 0 : Math.min(index * 0.018, 0.24) }}
-                  layout={!reduceMotion}
-                >
-                  <img
-                    src={image.thumb}
-                    alt={fill(copy.gameWall.imageAlt, { group: copy.gameWall.groups[image.group], index: imageNumber(image) })}
-                    loading={index < 12 ? "eager" : "lazy"}
-                    decoding="async"
-                  />
-                  <span className="game-wall-tile-scrim" aria-hidden="true" />
-                  <span className="game-wall-tile-meta">
-                    <span>{copy.gameWall.groups[image.group]}</span>
-                    <strong>{imageNumber(image)}</strong>
-                  </span>
-                  <span className="game-wall-tile-label">{label}</span>
-                </motion.button>
+                  image={image}
+                  index={index}
+                  label={label}
+                  copy={copy}
+                  reduceMotion={reduceMotion}
+                  tiltEnabled={tiltEnabled}
+                  onOpen={openViewer}
+                />
               );
             })}
           </AnimatePresence>
         </div>
 
-        <p className="game-wall-disclaimer">{copy.gameWall.disclaimer}</p>
+        <p className="game-wall-disclaimer"><LocalizedDecryptedText text={copy.gameWall.disclaimer} /></p>
       </div>
 
       <AnimatePresence>
@@ -223,8 +353,8 @@ export default function GamePhotoWall({ copy }) {
             }}
           >
             <div className="game-wall-lightbox-bar">
-              <p id="game-wall-lightbox-title">{getLabel(selected)}</p>
-              <p>{fill(copy.gameWall.position, { current: selectedIndex + 1, total: visibleImages.length })}</p>
+              <p id="game-wall-lightbox-title"><LocalizedDecryptedText text={getLabel(selected)} /></p>
+              <p><LocalizedDecryptedText text={fill(copy.gameWall.position, { current: selectedIndex + 1, total: visibleImages.length })} /></p>
               <button ref={closeButtonRef} type="button" onClick={closeViewer} aria-label={copy.gameWall.close}>
                 <X size={22} weight="bold" />
               </button>
@@ -234,15 +364,22 @@ export default function GamePhotoWall({ copy }) {
               <button className="game-wall-lightbox-arrow game-wall-lightbox-previous" type="button" onClick={() => moveSelection(-1)} aria-label={copy.gameWall.previous}>
                 <CaretLeft size={28} weight="bold" />
               </button>
-              <motion.img
-                key={selected.id}
-                className="game-wall-lightbox-image"
-                src={selected.full}
-                alt={fill(copy.gameWall.imageAlt, { group: copy.gameWall.groups[selected.group], index: imageNumber(selected) })}
-                initial={reduceMotion ? false : { opacity: 0, scale: 0.985 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: reduceMotion ? 0.01 : 0.24 }}
-              />
+              <div className="game-wall-lightbox-viewport">
+                <motion.img
+                  key={selected.id}
+                  className={`game-wall-lightbox-image${selected.letterboxed ? " game-wall-lightbox-image--letterboxed" : ""}`}
+                  src={selected.full}
+                  alt={fill(copy.gameWall.imageAlt, { group: copy.gameWall.groups[selected.group], index: imageNumber(selected) })}
+                  data-media-state={lightboxMedia.id === selected.id ? lightboxMedia.state : "loading"}
+                  data-media-shimmer="true"
+                  onLoad={() => setLightboxMedia({ id: selected.id, state: "loaded" })}
+                  onError={() => setLightboxMedia({ id: selected.id, state: "error" })}
+                  initial={reduceMotion ? false : { opacity: 0, scale: 0.985 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: reduceMotion ? 0.01 : 0.24 }}
+                />
+                {selected.previewOnly && <PreviewWatermark label={selected.watermarkText} />}
+              </div>
               <button className="game-wall-lightbox-arrow game-wall-lightbox-next" type="button" onClick={() => moveSelection(1)} aria-label={copy.gameWall.next}>
                 <CaretRight size={28} weight="bold" />
               </button>

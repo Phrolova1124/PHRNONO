@@ -32,8 +32,11 @@ function ShapeGrid({
     let motionAllowed = !motionQuery.matches && speed > 0;
 
     const resizeCanvas = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+      const nextWidth = canvas.offsetWidth;
+      const nextHeight = canvas.offsetHeight;
+
+      if (canvas.width !== nextWidth) canvas.width = nextWidth;
+      if (canvas.height !== nextHeight) canvas.height = nextHeight;
       drawGrid();
     };
 
@@ -277,6 +280,9 @@ function ShapeGrid({
       if (isVisible) start();
       else stop();
     });
+    const resizeObserver = typeof ResizeObserver === "undefined"
+      ? null
+      : new ResizeObserver(() => resizeCanvas());
 
     const handleVisibility = () => {
       isPageVisible = !document.hidden;
@@ -299,6 +305,7 @@ function ShapeGrid({
     document.addEventListener("visibilitychange", handleVisibility);
     motionQuery.addEventListener("change", handleMotionChange);
     observer.observe(canvas);
+    resizeObserver?.observe(canvas);
     resizeCanvas();
 
     return () => {
@@ -308,6 +315,7 @@ function ShapeGrid({
       document.removeEventListener("visibilitychange", handleVisibility);
       motionQuery.removeEventListener("change", handleMotionChange);
       observer.disconnect();
+      resizeObserver?.disconnect();
       stop();
     };
   }, [direction, speed, borderColor, hoverFillColor, squareSize, shape, hoverTrailAmount]);

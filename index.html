@@ -22,13 +22,40 @@
     <meta name="twitter:title" content="PHRNONO | Game Art &amp; Interactive Design Portfolio" />
     <meta name="twitter:description" content="Explore PHRNONO's Game Art, 3D and 2D work, interactive design, and selected portfolio projects." />
     <meta name="twitter:image" content="https://phrnono.com/og-phrnono.png" />
-    <link rel="icon" href="/phrnono-logo.png" type="image/png" />
-    <link rel="apple-touch-icon" href="/phrnono-logo.png" />
+    <link rel="icon" href="/portfolio/asset-175.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <title>PHRNONO | Game Art &amp; Interactive Design Portfolio</title>
+    <style>
+      .phrnono-boot { min-height: 100svh; display: grid; place-items: center; padding: 24px; background: #f5f5f2; color: #111310; font-family: system-ui, sans-serif; text-align: center; }
+      .phrnono-boot__panel { width: min(100%, 520px); padding: clamp(28px, 6vw, 54px); border: 1px solid #111310; }
+      .phrnono-boot__mark { display: block; width: 72px; height: 72px; margin: 0 auto 26px; object-fit: contain; }
+      .phrnono-boot__eyebrow { margin: 0 0 12px; font-size: 12px; font-weight: 700; letter-spacing: .12em; }
+      .phrnono-boot h1 { margin: 0; font-size: clamp(28px, 5vw, 48px); line-height: 1.05; }
+      .phrnono-boot__line { display: block; height: 2px; margin: 26px auto 18px; overflow: hidden; background: #c9cbc3; }
+      .phrnono-boot__line i { display: block; width: 42%; height: 100%; background: #d6f438; animation: phrnono-boot-progress 1.25s ease-in-out infinite alternate; }
+      .phrnono-boot__hint { margin: 0; color: #565a51; font-size: 14px; line-height: 1.6; }
+      .phrnono-boot__reload { display: inline-flex; margin-top: 22px; padding: 10px 16px; border: 1px solid #111310; color: #111310; font-size: 14px; font-weight: 700; text-decoration: none; }
+      .phrnono-boot__reload:hover { background: #d6f438; }
+      @keyframes phrnono-boot-progress { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <main class="phrnono-boot" aria-live="polite" aria-label="PHRNONO 正在加载">
+        <section class="phrnono-boot__panel">
+          <img class="phrnono-boot__mark" src="/portfolio/asset-175.svg" alt="" width="72" height="72" />
+          <p class="phrnono-boot__eyebrow">PHRNONO / VISUAL ARCHIVE</p>
+          <h1>正在打开作品档案</h1>
+          <span class="phrnono-boot__line" aria-hidden="true"><i></i></span>
+          <p class="phrnono-boot__hint">如果此画面没有自动进入，请重新载入此页面。</p>
+          <a class="phrnono-boot__reload" href="/">重新载入&nbsp; ↗</a>
+        </section>
+      </main>
+    </div>
+    <noscript>
+      <p style="margin:0;padding:0 24px 28px;font:14px/1.6 system-ui,sans-serif;text-align:center">PHRNONO 需要启用 JavaScript 才能显示作品档案。</p>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -2,14 +2,26 @@ const source = (folder, file) => `/game-wall/${folder}/${file}.jpg`;
 const collectionSource = (folder, file) => `${source(folder, file)}?v=collection-20260820`;
 
 const collectionShapes = ["feature", "wide", "standard", "wide", "feature", "standard", "wide"];
-const collectionImages = Array.from({ length: 112 }, (_, index) => {
-  const number = index + 1;
+const isLetterboxedCollectionImage = (number) => (
+  (number >= 7 && number <= 15)
+  || (number >= 35 && number <= 46)
+  || (number >= 50 && number <= 52)
+  || (number >= 58 && number <= 78)
+  || (number >= 81 && number <= 95)
+  || (number >= 118 && number <= 132)
+);
+const collectionNumbers = [
+  ...Array.from({ length: 21 }, (_, index) => index + 113),
+  ...Array.from({ length: 112 }, (_, index) => index + 1),
+];
+const collectionImages = collectionNumbers.map((number, index) => {
   const id = `collection-${String(number).padStart(3, "0")}`;
   return {
     id,
     group: "collection",
     number,
     shape: collectionShapes[index % collectionShapes.length],
+    letterboxed: isLetterboxedCollectionImage(number),
     full: collectionSource("full", id),
     thumb: collectionSource("thumb", id),
   };

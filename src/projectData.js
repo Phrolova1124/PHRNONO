@@ -50,6 +50,15 @@ export const projects = [
     localUrl: "/work/art-design",
   },
   {
+    id: "ciaAI",
+    slug: "cia-ai",
+    title: "Cia AI",
+    category: "INTERACTIVE",
+    year: "2026",
+    image: "/portfolio/cia-ai-cover.svg",
+    localUrl: "/work/cia-ai",
+  },
+  {
     id: "roomDesign",
     slug: "room-design",
     title: "Room Design",

@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f5f2" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>PHRNONO | 离线状态</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f5f5f2;
+        --ink: #111310;
+        --muted: #63665f;
+        --line: #c9cbc3;
+        --acid: #d6f438;
+        --display: "Arial Narrow", "Roboto Condensed", system-ui, sans-serif;
+        --body: "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+        --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        min-width: 320px;
+        min-height: 100dvh;
+        margin: 0;
+        background:
+          linear-gradient(rgba(17, 19, 16, 0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(17, 19, 16, 0.08) 1px, transparent 1px),
+          var(--paper);
+        background-size: 48px 48px;
+        color: var(--ink);
+        font-family: var(--body);
+      }
+
+      button { font: inherit; }
+
+      button:focus-visible {
+        outline: 3px solid #425000;
+        outline-offset: 4px;
+      }
+
+      .offline-page {
+        display: grid;
+        min-height: 100dvh;
+        grid-template-rows: 69px minmax(0, 1fr) auto;
+      }
+
+      .offline-header,
+      .offline-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 0 clamp(18px, 3vw, 56px);
+        border-bottom: 1px solid var(--line);
+        background: rgba(245, 245, 242, 0.92);
+      }
+
+      .offline-brand {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .offline-brand strong {
+        font-family: var(--display);
+        font-size: 1.55rem;
+        font-weight: 800;
+        letter-spacing: -0.055em;
+      }
+
+      .offline-brand span,
+      .offline-footer,
+      .offline-status,
+      .offline-language button {
+        font-family: var(--mono);
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+
+      .offline-brand span { color: var(--muted); }
+
+      .offline-language {
+        display: inline-flex;
+        border: 1px solid var(--ink);
+      }
+
+      .offline-language button {
+        min-width: 36px;
+        min-height: 31px;
+        border: 0;
+        border-left: 1px solid var(--ink);
+        background: transparent;
+        color: var(--ink);
+        cursor: pointer;
+      }
+
+      .offline-language button:first-child { border-left: 0; }
+
+      .offline-language button[aria-pressed="true"] {
+        background: var(--acid);
+      }
+
+      .offline-main {
+        display: grid;
+        width: min(100%, 1440px);
+        margin: 0 auto;
+        grid-template-columns: minmax(0, 1.15fr) minmax(230px, 0.42fr);
+        align-items: center;
+        gap: clamp(32px, 8vw, 150px);
+        padding: clamp(54px, 11vw, 170px) clamp(18px, 8vw, 150px);
+      }
+
+      .offline-copy {
+        max-width: 760px;
+        border-top: 2px solid var(--ink);
+        padding-top: 17px;
+      }
+
+      .offline-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+        color: #425000;
+        text-transform: uppercase;
+      }
+
+      .offline-status::before {
+        width: 28px;
+        height: 2px;
+        flex: 0 0 auto;
+        background: var(--acid);
+        content: "";
+      }
+
+      h1 {
+        max-width: 8ch;
+        margin: clamp(26px, 4vw, 48px) 0 0;
+        font-family: var(--display);
+        font-size: clamp(4.2rem, 11vw, 9.5rem);
+        font-weight: 800;
+        letter-spacing: -0.07em;
+        line-height: 0.76;
+      }
+
+      html[lang^="zh"] h1,
+      html[lang="ja"] h1 {
+        max-width: 5em;
+        font-family: var(--body);
+        font-size: clamp(4rem, 8vw, 7.2rem);
+        letter-spacing: -0.07em;
+        line-height: 0.88;
+      }
+
+      .offline-description {
+        max-width: 33rem;
+        margin: clamp(28px, 4vw, 44px) 0 0;
+        color: var(--muted);
+        font-size: clamp(1rem, 1.4vw, 1.16rem);
+        line-height: 1.75;
+      }
+
+      .offline-retry {
+        min-height: 48px;
+        margin-top: clamp(26px, 4vw, 42px);
+        padding: 0 22px;
+        border: 1px solid var(--ink);
+        background: var(--ink);
+        color: var(--paper);
+        cursor: pointer;
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        transition: transform 160ms ease, background-color 160ms ease, color 160ms ease;
+      }
+
+      .offline-retry:hover {
+        background: var(--acid);
+        color: var(--ink);
+      }
+
+      .offline-retry:active { transform: translateY(1px); }
+
+      .offline-reference {
+        align-self: stretch;
+        display: flex;
+        align-items: end;
+        padding: 0 0 clamp(9px, 1vw, 16px) clamp(20px, 3vw, 46px);
+        border-left: 1px solid var(--ink);
+      }
+
+      .offline-reference p {
+        max-width: 21ch;
+        margin: 0;
+        color: var(--muted);
+        font-family: var(--mono);
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.055em;
+        line-height: 1.75;
+      }
+
+      .offline-footer {
+        min-height: 51px;
+        border-top: 1px solid var(--line);
+        border-bottom: 0;
+        color: var(--muted);
+      }
+
+      .offline-footer strong {
+        color: var(--ink);
+        font-family: var(--display);
+        font-size: 1rem;
+        letter-spacing: -0.035em;
+      }
+
+      @media (max-width: 700px) {
+        body { background-size: 36px 36px; }
+
+        .offline-page { grid-template-rows: 62px minmax(0, 1fr) auto; }
+
+        .offline-header,
+        .offline-footer { padding-inline: 18px; }
+
+        .offline-brand span { display: none; }
+
+        .offline-main {
+          grid-template-columns: 1fr;
+          align-items: start;
+          gap: 42px;
+          padding: 86px 18px 62px;
+        }
+
+        h1 { font-size: clamp(4rem, 19vw, 6.8rem); }
+
+        html[lang^="zh"] h1,
+        html[lang="ja"] h1 { font-size: clamp(3.7rem, 16vw, 5.8rem); }
+
+        .offline-reference {
+          min-height: 82px;
+          padding: 15px 0 0 18px;
+        }
+
+        .offline-reference p { max-width: 34ch; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .offline-retry { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="offline-page">
+      <header class="offline-header">
+        <div class="offline-brand" aria-label="PHRNONO Portfolio">
+          <strong>PHRNONO</strong>
+          <span>PORTFOLIO</span>
+        </div>
+        <div class="offline-language" role="group" aria-label="选择语言">
+          <button type="button" data-locale="zh" lang="zh-CN" aria-pressed="true">中</button>
+          <button type="button" data-locale="en" lang="en" aria-pressed="false">EN</button>
+          <button type="button" data-locale="ja" lang="ja" aria-pressed="false">日</button>
+        </div>
+      </header>
+
+      <main class="offline-main" aria-labelledby="offline-title">
+        <section class="offline-copy">
+          <p class="offline-status" role="status" aria-live="polite" data-copy="status">连接状态 / 离线</p>
+          <h1 id="offline-title" data-copy="title">当前没有网络连接</h1>
+          <p class="offline-description" data-copy="description">网络恢复后，重新加载页面即可继续浏览。</p>
+          <button class="offline-retry" type="button" data-copy="action">重新加载</button>
+        </section>
+        <aside class="offline-reference" aria-hidden="true">
+          <p data-copy="reference">此提示页已保存在浏览器中。</p>
+        </aside>
+      </main>
+
+      <footer class="offline-footer">
+        <strong>PHRNONO</strong>
+        <span data-copy="footer">本地离线提示</span>
+      </footer>
+    </div>
+
+    <script>
+      (() => {
+        const storageKey = "phrolova-locale";
+        const copies = {
+          zh: {
+            documentLang: "zh-CN",
+            documentTitle: "PHRNONO | 离线状态",
+            languageLabel: "选择语言",
+            status: "连接状态 / 离线",
+            title: "当前没有网络连接",
+            description: "网络恢复后，重新加载页面即可继续浏览。",
+            action: "重新加载",
+            reference: "此提示页已保存在浏览器中。",
+            footer: "本地离线提示",
+            onlineStatus: "连接状态 / 已恢复",
+            onlineTitle: "网络已恢复",
+            onlineDescription: "现在可以重新加载页面，获取最新内容。",
+            onlineAction: "返回网站",
+          },
+          en: {
+            documentLang: "en",
+            documentTitle: "PHRNONO | Offline",
+            languageLabel: "Select language",
+            status: "CONNECTION / OFFLINE",
+            title: "You are offline",
+            description: "When the connection returns, reload the page to continue browsing.",
+            action: "Reload page",
+            reference: "This notice is saved in your browser.",
+            footer: "LOCAL OFFLINE NOTICE",
+            onlineStatus: "CONNECTION / RESTORED",
+            onlineTitle: "Connection restored",
+            onlineDescription: "Reload the page to get the latest content.",
+            onlineAction: "Return to site",
+          },
+          ja: {
+            documentLang: "ja",
+            documentTitle: "PHRNONO | オフライン",
+            languageLabel: "言語を選択",
+            status: "接続状態 / オフライン",
+            title: "現在オフラインです",
+            description: "接続が戻ったら、ページを再読み込みして閲覧を続けられます。",
+            action: "再読み込み",
+            reference: "この案内はブラウザに保存されています。",
+            footer: "ローカルオフライン案内",
+            onlineStatus: "接続状態 / 復帰",
+            onlineTitle: "接続が回復しました",
+            onlineDescription: "ページを再読み込みして、最新の内容を取得できます。",
+            onlineAction: "サイトに戻る",
+          },
+        };
+
+        const languageButtons = [...document.querySelectorAll("[data-locale]")];
+        const copyTargets = [...document.querySelectorAll("[data-copy]")];
+        const languageGroup = document.querySelector(".offline-language");
+        const retryButton = document.querySelector(".offline-retry");
+        let online = false;
+        let locale = "zh";
+
+        try {
+          const savedLocale = localStorage.getItem(storageKey);
+          if (copies[savedLocale]) locale = savedLocale;
+        } catch {
+          if (navigator.language.startsWith("ja")) locale = "ja";
+          if (navigator.language.startsWith("en")) locale = "en";
+        }
+
+        const applyCopy = () => {
+          const copy = copies[locale];
+          const stateCopy = online
+            ? {
+              status: copy.onlineStatus,
+              title: copy.onlineTitle,
+              description: copy.onlineDescription,
+              action: copy.onlineAction,
+            }
+            : copy;
+
+          document.documentElement.lang = copy.documentLang;
+          document.title = copy.documentTitle;
+          languageGroup.setAttribute("aria-label", copy.languageLabel);
+          copyTargets.forEach((target) => {
+            const key = target.dataset.copy;
+            target.textContent = stateCopy[key] || copy[key];
+          });
+          languageButtons.forEach((button) => {
+            button.setAttribute("aria-pressed", String(button.dataset.locale === locale));
+          });
+        };
+
+        languageButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            locale = button.dataset.locale;
+            try { localStorage.setItem(storageKey, locale); } catch {}
+            applyCopy();
+          });
+        });
+
+        retryButton.addEventListener("click", () => window.location.reload());
+        window.addEventListener("online", () => {
+          online = true;
+          applyCopy();
+        });
+        window.addEventListener("offline", () => {
+          online = false;
+          applyCopy();
+        });
+
+        applyCopy();
+      })();
+    </script>
+  </body>
+</html>

@@ -25,6 +25,7 @@ function LineSidebar({
   fontSize = 1.1,
   smoothing = 100,
   defaultActive = null,
+  activeIndex: controlledActiveIndex = null,
   onItemClick,
   ariaLabel = "Section navigation",
   className = "",
@@ -42,6 +43,12 @@ function LineSidebar({
 
   activeRef.current = activeIndex;
   smoothingRef.current = smoothing;
+
+  useEffect(() => {
+    if (controlledActiveIndex !== null && controlledActiveIndex !== undefined) {
+      setActiveIndex(controlledActiveIndex);
+    }
+  }, [controlledActiveIndex]);
 
   const runFrame = useCallback((now) => {
     const elapsed = Math.min((now - lastFrameRef.current) / 1000, 0.05);

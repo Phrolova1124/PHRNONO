@@ -3,7 +3,14 @@
   "name": "phrnono",
   "main": "worker/index.js",
   "compatibility_date": "2026-08-18",
+  "keep_vars": true,
   "workers_dev": true,
+  "ai": {
+    "binding": "AI"
+  },
+  "cache": {
+    "enabled": true
+  },
   "routes": [
     {
       "pattern": "*.phrnono.com/*",
@@ -18,6 +25,54 @@
   "assets": {
     "directory": "./dist/client",
     "binding": "SITE_ASSETS",
-    "not_found_handling": "single-page-application"
+    "not_found_handling": "single-page-application",
+    "run_worker_first": [
+      "/api/*",
+      "/music/tracks/*"
+    ]
+  },
+  "d1_databases": [
+    {
+      "binding": "CONTENT_DB",
+      "database_name": "phrnono-content",
+      "database_id": "eae5f061-00c2-478e-8759-bcee839f1d97",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA_BUCKET",
+      "bucket_name": "phrnono-media"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "VISITOR_COUNTER",
+        "class_name": "VisitorCounter"
+      },
+      {
+        "name": "AUTH_LIMITER",
+        "class_name": "AuthLimiter"
+      },
+      {
+        "name": "CIA_GUIDE_LIMITER",
+        "class_name": "CiaGuideLimiter"
+      }
+    ]
+  },
+  "exports": {
+    "VisitorCounter": {
+      "type": "durable-object",
+      "storage": "sqlite"
+    },
+    "AuthLimiter": {
+      "type": "durable-object",
+      "storage": "sqlite"
+    },
+    "CiaGuideLimiter": {
+      "type": "durable-object",
+      "storage": "sqlite"
+    }
   }
 }

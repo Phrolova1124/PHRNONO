@@ -1,0 +1,39 @@
+.preview-watermark {
+  position: absolute;
+  inset: -12%;
+  z-index: 1;
+  display: grid;
+  align-content: space-evenly;
+  gap: 1.4rem;
+  overflow: hidden;
+  color: rgba(214, 244, 56, 0.48);
+  font-family: var(--mono);
+  font-size: clamp(0.44rem, 0.78vw, 0.68rem);
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  line-height: 1;
+  pointer-events: none;
+  text-transform: uppercase;
+  transform: rotate(-24deg) scale(1.18);
+  transform-origin: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.preview-watermark > span {
+  display: block;
+  width: max-content;
+  min-width: 140%;
+  padding: 0.45rem 0;
+  border-block: 1px solid rgba(214, 244, 56, 0.32);
+  background: rgba(8, 9, 11, 0.2);
+  text-align: center;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+}
+
+@media (max-width: 720px) {
+  .preview-watermark {
+    font-size: 0.48rem;
+    letter-spacing: 0.09em;
+  }
+}

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <title>Cia AI local studio — conversation and tools interface study</title>
+  <rect width="1200" height="900" fill="#f5f5f2"/>
+  <path d="M72 64H1128V836H72V64Z" stroke="#111310"/>
+  <path d="M72 132H1128M72 744H1128" stroke="#111310"/>
+  <g fill="#111310" font-family="Arial, sans-serif">
+    <text x="100" y="107" font-size="19" letter-spacing="3">PHRNONO / INTERACTION DESIGN</text>
+    <text x="100" y="345" font-size="192" font-weight="900" letter-spacing="-12">CIA AI</text>
+    <text x="109" y="402" font-size="28" letter-spacing="9">LOCAL STUDIO</text>
+    <text x="100" y="793" font-size="18" letter-spacing="3">WINDOWS / LOCAL AI</text>
+    <text x="100" y="822" font-size="13" letter-spacing="2">INTERFACE STUDY</text>
+  </g>
+  <path d="M756 91H784M770 77V105M1086 91H1114M1100 77V105" stroke="#111310"/>
+  <rect x="468" y="449" width="602" height="224" fill="#fbfbf8" stroke="#111310"/>
+  <rect x="468" y="449" width="9" height="224" fill="#d6f438"/>
+  <path d="M477 510H1070M477 613H1070M619 510V613M770 510V613M922 510V613" stroke="#c9cbc3"/>
+  <g fill="#111310" font-family="Arial, sans-serif" font-size="19">
+    <text x="502" y="488" letter-spacing="3">ONE CONVERSATION</text>
+    <text x="507" y="569">CHAT</text>
+    <text x="651" y="569">IMAGE</text>
+    <text x="809" y="569">CODE</text>
+    <text x="938" y="569">DESKTOP</text>
+    <text x="502" y="650" font-size="15" letter-spacing="1">REQUEST / PERMISSION / RESULT</text>
+  </g>
+  <path d="M109 465V672H404M109 509H360M109 561H313M109 613H360" stroke="#c9cbc3"/>
+  <path d="M964 191H1070V297M1070 191L964 297" stroke="#111310" stroke-width="3"/>
+  <rect x="968" y="780" width="102" height="24" fill="#d6f438"/>
+</svg>

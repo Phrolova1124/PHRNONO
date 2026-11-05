@@ -1,0 +1,52 @@
+img[data-media-state="loading"],
+img[data-media-state="error"] {
+  background-color: #e5e6df;
+  background-image:
+    linear-gradient(90deg, transparent 0%, rgba(17, 19, 16, 0.04) 38%, rgba(214, 244, 56, 0.26) 50%, rgba(17, 19, 16, 0.04) 62%, transparent 100%),
+    repeating-linear-gradient(0deg, rgba(17, 19, 16, 0.055) 0 1px, transparent 1px 18px);
+  background-position: 0 0, 0 0;
+  background-size: 220% 100%, 100% 100%;
+}
+
+img[data-media-state="loading"] {
+  color: transparent;
+}
+
+img[data-media-state="loading"][data-media-shimmer="true"] {
+  animation: skeleton-image-sweep 1.15s ease-in-out infinite;
+}
+
+img[data-media-state="error"] {
+  background-color: #d8dad2;
+  background-image:
+    linear-gradient(135deg, transparent calc(50% - 1px), rgba(17, 19, 16, 0.11) calc(50% - 1px) calc(50% + 1px), transparent calc(50% + 1px)),
+    repeating-linear-gradient(0deg, rgba(17, 19, 16, 0.055) 0 1px, transparent 1px 18px);
+}
+
+.site-shell-game-wall img[data-media-state="loading"],
+.site-shell-game-wall img[data-media-state="error"],
+.site-shell-music img[data-media-state="loading"],
+.site-shell-music img[data-media-state="error"] {
+  background-color: #161b18;
+  background-image:
+    linear-gradient(90deg, transparent 0%, rgba(242, 241, 235, 0.05) 38%, rgba(214, 244, 56, 0.38) 50%, rgba(242, 241, 235, 0.05) 62%, transparent 100%),
+    repeating-linear-gradient(0deg, rgba(242, 241, 235, 0.075) 0 1px, transparent 1px 18px);
+}
+
+.site-shell-game-wall img[data-media-state="error"],
+.site-shell-music img[data-media-state="error"] {
+  background-image:
+    linear-gradient(135deg, transparent calc(50% - 1px), rgba(242, 241, 235, 0.15) calc(50% - 1px) calc(50% + 1px), transparent calc(50% + 1px)),
+    repeating-linear-gradient(0deg, rgba(242, 241, 235, 0.075) 0 1px, transparent 1px 18px);
+}
+
+@keyframes skeleton-image-sweep {
+  from { background-position: 100% 0, 0 0; }
+  to { background-position: -120% 0, 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  img[data-media-state="loading"][data-media-shimmer="true"] {
+    animation: none;
+  }
+}

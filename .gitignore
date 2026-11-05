@@ -1,3 +1,8 @@
 node_modules/
 dist/
 tmp/
+.dev.vars*
+.env*
+.wrangler/
+__pycache__/
+*.pyc
