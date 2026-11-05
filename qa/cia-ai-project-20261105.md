@@ -32,8 +32,19 @@ Screenshots: [desktop](cia-ai-desktop-20261105.jpg), [phone](cia-ai-mobile-20261
 
 ## State and limits
 
-This is a local preview/build, **not a confirmed production publication**. No Cloudflare deploy/DNS/tunnel/authentication/secret change was made. Existing Sites connector has no PHRNONO project, so it was not used to create a replacement site. Existing dirty worktree and unrelated changes were preserved.
+At the initial local-preview handoff, this was not a confirmed production publication. Existing Sites connector has no PHRNONO project, so it was not used to create a replacement site. Existing dirty worktree and unrelated changes were preserved. The later owner-requested production release is recorded below.
 
 `INTERACTIVE` is a static seed category; owner CMS category editing was not expanded. Local AI runtime, weights, training data, story and character artwork are unchanged. No model process was started. The loopback-only Vite preview remains in the retained session for the user's open preview; it is not an AI service or internet tunnel.
 
 Claude handoff updated at `D:/3D__Game Design__Java/Cia AI/CLAUDE_HANDOFF.md`.
+
+## Production release — 2026-11-05
+
+After the owner requested `push`, site source was committed and pushed as `39fd53c08b58650881de9d5de63622f22e98d773`. A repeated `push` continued to the existing Cloudflare Worker because the live site still served the previous bundle.
+
+- Reused the existing official Wrangler4.149.0 CLI and existing authorized OAuth session; no package install or new login. Diagnostic/temp output directed to ignored D-drive `tmp/cloudflare-release-20261105/`.
+- Read the previous deployed version `7190e030-5f32-4216-b540-7e8f9629cec0` binding inventory; local config accounts for its AI/assets/D1/R2/three DO bindings. Existing secret and plain-text bindings retained through `keep_vars:true`; no credentials were displayed or replaced. No database migration, namespace deletion, DNS edit or local AI exposure was performed.
+- `wrangler deploy --dry-run` succeeded. Actual deploy uploaded six changed assets, reused482 existing assets and published the `phrnono` Worker with version **12851248-4859-4e08-94eb-403b186a3dc1**, including the existing custom domain.
+- Post-release HTTP verification: `https://phrnono.com/work/cia-ai` returns200 and references `index-DkiziI0B.js`; the served bundle contains `/work/cia-ai`; the served project CSS contains `cia-flow-unfold`. All16 existing binding names remain present in the deployed version. This is deployed asset/routing verification; the earlier browser screenshots remain local visual evidence, not newly captured production screenshots.
+
+Published project: https://phrnono.com/work/cia-ai
