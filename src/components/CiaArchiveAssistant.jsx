@@ -540,7 +540,7 @@ export default function CiaArchiveAssistant({ copy, locale, pageKind, blocked = 
           )}
         </section>
       ) : (
-        <button ref={triggerRef} type="button" className="cia-guide__trigger" onClick={openPanel} disabled={blocked} aria-expanded="false">
+        <button ref={triggerRef} type="button" className="cia-guide__trigger" onClick={openPanel} disabled={blocked} aria-expanded="false" aria-label={copy.open}>
           <span className="cia-guide__trigger-avatar" aria-hidden="true"><img src="/characters/cia/avatar-cutout.png" alt="" /></span>
           <span className="cia-guide__trigger-copy"><small>{copy.ciaName}</small><strong>{copy.open}</strong></span>
           <span className="cia-guide__trigger-mark" aria-hidden="true"><MoonStars weight="fill" /></span>

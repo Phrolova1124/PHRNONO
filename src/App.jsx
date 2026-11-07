@@ -2078,7 +2078,7 @@ export function App() {
             soundEnabled={soundEnabled}
             onSoundToggle={toggleSound}
           />
-          {route.kind !== "character" && <SiteRail copy={copy} workActive={workActive} gameWallActive={gameWallActive} musicActive={musicActive} onNavigate={requestNavigation} />}
+          {route.kind !== "character" && route.kind !== "ciaAI" && <SiteRail copy={copy} workActive={workActive} gameWallActive={gameWallActive} musicActive={musicActive} onNavigate={requestNavigation} />}
           <CiaArchiveAssistant
             copy={copy.ciaGuide}
             locale={locale}

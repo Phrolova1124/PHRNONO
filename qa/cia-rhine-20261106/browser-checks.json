@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-06",
+  "url": "http://127.0.0.1:5173/work/cia-ai",
+  "console": [],
+  "finalViewport": {
+    "dpr": 1,
+    "height": 720,
+    "scrollWidth": 1265,
+    "stage": {
+      "bottom": 720,
+      "height": 652,
+      "left": 0,
+      "right": 1265,
+      "top": 68,
+      "width": 1265,
+      "x": 0,
+      "y": 68
+    },
+    "width": 1280
+  },
+  "testedViewports": [
+    "1280x788",
+    "1024x768",
+    "390x844"
+  ],
+  "testedInteractions": [
+    "read/back",
+    "search/result/empty",
+    "save/filter",
+    "tabs/keyboard",
+    "document arrows",
+    "replay/skip",
+    "reduce motion",
+    "zh/en/ja",
+    "model drag"
+  ]
+}
